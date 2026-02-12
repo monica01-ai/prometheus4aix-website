@@ -261,3 +261,29 @@ function prometheus_cart_count_fragments( $fragments ) {
     $fragments['span.cart-count'] = '<span class="cart-count">' . WC()->cart->get_cart_contents_count() . '</span>';
     return $fragments;
 }
+
+/**
+ * WooCommerce - Custom My Account menu items (Figma: Edit profile, Orders, Licenses, Downloads)
+ */
+function prometheus_account_menu_items( $items ) {
+    $new_items = array(
+        'edit-account' => __( 'Edit profile', 'prometheus4aix' ),
+        'orders'       => __( 'Orders', 'prometheus4aix' ),
+        'downloads'    => __( 'Downloads', 'prometheus4aix' ),
+        'customer-logout' => __( 'Log out', 'prometheus4aix' ),
+    );
+    return $new_items;
+}
+add_filter( 'woocommerce_account_menu_items', 'prometheus_account_menu_items' );
+
+/**
+ * WooCommerce - Custom add to cart button with price
+ */
+function prometheus_single_add_to_cart_text( $text, $product ) {
+    $price = $product->get_price();
+    if ( $price ) {
+        return sprintf( __( 'ADD TO CART %s', 'prometheus4aix' ), wc_price( $price ) );
+    }
+    return __( 'ADD TO CART', 'prometheus4aix' );
+}
+add_filter( 'woocommerce_product_single_add_to_cart_text', 'prometheus_single_add_to_cart_text', 10, 2 );

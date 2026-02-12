@@ -1,61 +1,47 @@
 <?php
 /**
- * The Template for displaying product archives (Shop page) - Figma Design v2
+ * Shop/Catalog Page - Prometheus4AIX
+ * Wide cards layout (image left + content right)
  */
 
 get_header(); ?>
 
 <main class="shop-page">
     <div class="shop-container container">
-        
-        <header class="shop-header">
-            <?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-                <h1 class="shop-title"><?php woocommerce_page_title(); ?></h1>
-            <?php endif; ?>
-            
-            <?php do_action( 'woocommerce_archive_description' ); ?>
-        </header>
 
-        <div class="shop-content">
-            <!-- Products in large card format -->
-            <div class="products-area products-cards">
+        <?php if ( woocommerce_product_loop() ) : ?>
 
-                <?php if ( woocommerce_product_loop() ) : ?>
-
-                    <div class="product-cards-grid">
-
-                        <?php while ( have_posts() ) : the_post(); ?>
-                            <div class="product-card">
-                                <div class="product-card__image">
-                                    <?php echo woocommerce_get_product_thumbnail('large'); ?>
-                                </div>
-                                <div class="product-card__content">
-                                    <h3 class="product-card__title">
-                                        <a href="<?php echo get_permalink(); ?>"><?php echo strtoupper(get_the_title()); ?></a>
-                                    </h3>
-                                    <div class="product-card__description">
-                                        <?php echo wp_trim_words(get_the_excerpt(), 20, '...'); ?>
-                                    </div>
-                                    <div class="product-card__actions">
-                                        <a href="<?php echo get_permalink(); ?>" class="btn btn-outline">CHOOSE PLAN</a>
-                                        <a href="<?php echo get_permalink(); ?>" class="btn-text-link">Free trial</a>
-                                    </div>
-                                </div>
+            <div class="catalog-grid">
+                <?php while ( have_posts() ) : the_post();
+                    global $product;
+                ?>
+                    <div class="catalog-card">
+                        <div class="catalog-card__image">
+                            <a href="<?php the_permalink(); ?>">
+                                <?php echo has_post_thumbnail() ? the_post_thumbnail( 'large' ) : wc_placeholder_img( 'large' ); ?>
+                            </a>
+                        </div>
+                        <div class="catalog-card__content">
+                            <h2 class="catalog-card__title">
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                            </h2>
+                            <div class="catalog-card__description">
+                                <?php echo wpautop( $product->get_short_description() ); ?>
                             </div>
-                        <?php endwhile; ?>
-
+                            <div class="catalog-card__actions">
+                                <a href="<?php the_permalink(); ?>" class="catalog-card__btn catalog-card__btn--plan">Choose Plan</a>
+                                <a href="<?php the_permalink(); ?>" class="catalog-card__btn catalog-card__btn--trial">Free trial</a>
+                            </div>
+                        </div>
                     </div>
-
-                    <?php woocommerce_pagination(); ?>
-
-                <?php else : ?>
-                    <div class="no-products">
-                        <?php do_action( 'woocommerce_no_products_found' ); ?>
-                    </div>
-                <?php endif; ?>
-
+                <?php endwhile; ?>
             </div>
-        </div>
+
+            <?php woocommerce_pagination(); ?>
+
+        <?php else : ?>
+            <?php do_action( 'woocommerce_no_products_found' ); ?>
+        <?php endif; ?>
 
     </div>
 </main>
