@@ -558,9 +558,6 @@ h1 { margin-block: 0; }
 		order: 1;
 		width: 244px;
 		height: 67px;
-		background-image: url("images/logo-footer-768.svg");
-		background-repeat: no-repeat;
-		background-size: 244px 67px;
     margin-left: 120px;
 	}
 
@@ -1160,9 +1157,6 @@ h1 { margin-block: 0; }
 		order: 1;
 		width: 244px;
 		height: 67px;
-		background-image: url("images/logo-footer-768.svg");
-		background-repeat: no-repeat;
-		background-size: 244px 67px;
     margin-left: 120px;
 	}
 
@@ -1689,12 +1683,11 @@ h1 { margin-block: 0; }
 
 	.footer-logo {
 		order: 2;
-		background-image: url("images/footer-logo.png");
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: 172px 52px;
-		background-position-y: center;
 		margin:0;
+	}
+	.footer-logo img {
+		width: 172px;
+		height: auto;
 	}
 
 	.footer .copyright {
