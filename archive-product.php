@@ -1,6 +1,6 @@
 <?php
 /**
- * The Template for displaying product archives (Shop page)
+ * The Template for displaying product archives (Shop page) - Figma Design v2
  */
 
 get_header(); ?>
@@ -17,57 +17,41 @@ get_header(); ?>
         </header>
 
         <div class="shop-content">
-            
-            <!-- Filters sidebar -->
-            <aside class="shop-filters">
-                <div class="filter-section">
-                    <h3 class="filter-title">Categories</h3>
-                    <?php 
-                    $args = array(
-                        'taxonomy' => 'product_cat',
-                        'orderby' => 'name',
-                        'show_count' => true,
-                        'hierarchical' => true,
-                        'title_li' => ''
-                    );
-                    ?>
-                    <ul class="filter-list">
-                        <?php wp_list_categories($args); ?>
-                    </ul>
-                </div>
-                
-                <div class="filter-section">
-                    <h3 class="filter-title">Price Range</h3>
-                    <?php the_widget( 'WC_Widget_Price_Filter' ); ?>
-                </div>
-            </aside>
-
-            <!-- Products grid -->
-            <div class="products-area">
-                
-                <div class="shop-toolbar">
-                    <div class="result-count">
-                        <?php woocommerce_result_count(); ?>
-                    </div>
-                    <div class="ordering">
-                        <?php woocommerce_catalog_ordering(); ?>
-                    </div>
-                </div>
+            <!-- Products in large card format -->
+            <div class="products-area products-cards">
 
                 <?php if ( woocommerce_product_loop() ) : ?>
 
-                    <?php woocommerce_product_loop_start(); ?>
+                    <div class="product-cards-grid">
 
-                    <?php while ( have_posts() ) : the_post(); ?>
-                        <?php wc_get_template_part( 'content', 'product' ); ?>
-                    <?php endwhile; ?>
+                        <?php while ( have_posts() ) : the_post(); ?>
+                            <div class="product-card">
+                                <div class="product-card__image">
+                                    <?php echo woocommerce_get_product_thumbnail('large'); ?>
+                                </div>
+                                <div class="product-card__content">
+                                    <h3 class="product-card__title">
+                                        <a href="<?php echo get_permalink(); ?>"><?php echo strtoupper(get_the_title()); ?></a>
+                                    </h3>
+                                    <div class="product-card__description">
+                                        <?php echo wp_trim_words(get_the_excerpt(), 20, '...'); ?>
+                                    </div>
+                                    <div class="product-card__actions">
+                                        <a href="<?php echo get_permalink(); ?>" class="btn btn-outline">CHOOSE PLAN</a>
+                                        <a href="<?php echo get_permalink(); ?>" class="btn-text-link">Free trial</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endwhile; ?>
 
-                    <?php woocommerce_product_loop_end(); ?>
+                    </div>
 
                     <?php woocommerce_pagination(); ?>
 
                 <?php else : ?>
-                    <?php do_action( 'woocommerce_no_products_found' ); ?>
+                    <div class="no-products">
+                        <?php do_action( 'woocommerce_no_products_found' ); ?>
+                    </div>
                 <?php endif; ?>
 
             </div>
