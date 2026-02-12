@@ -3,7 +3,7 @@ Theme Name: Prometheus4AIX-v2
 Author: kernelPanic
 Author URI: http://strava.ltd
 Description: prometheus4aix.com custom theme
-Version: 1.1
+Version: 1.2
 */
 
 body {
@@ -2930,6 +2930,7 @@ h1 { margin-block: 0; }
     --color-text-light: #888888;
     --font-family: 'Roboto', sans-serif;
     --border-radius: 8px;
+    --border-radius-btn: 20px;
     --shadow: 0 2px 8px rgba(86, 48, 117, 0.1);
     --transition: 0.3s ease;
 }
@@ -2943,7 +2944,7 @@ h1 { margin-block: 0; }
     font-family: var(--font-family);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-btn);
     cursor: pointer;
     transition: all var(--transition);
     text-align: center;
@@ -3010,20 +3011,41 @@ h1 { margin-block: 0; }
 .catalog-card__description { font-size: 14px; line-height: 1.6; color: var(--color-text); margin-bottom: 20px; }
 .catalog-card__description p { margin: 0; }
 
-.catalog-card__actions { display: flex; gap: 16px; align-items: center; }
+.catalog-card__price { font-size: 20px; font-weight: 700; color: var(--color-primary); margin-bottom: 16px; }
+.catalog-card__price del { font-size: 14px; color: var(--color-text-light); font-weight: 400; }
+.catalog-card__price ins { text-decoration: none; }
 
-.catalog-card__btn--plan {
+.catalog-card__actions { display: flex; gap: 16px; align-items: center; }
+.catalog-card__actions .button,
+.catalog-card__actions a.add_to_cart_button {
     padding: 10px 20px;
-    border: 2px solid var(--color-primary);
-    color: var(--color-primary);
+    background: var(--color-accent);
+    color: var(--color-white) !important;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-btn);
+    border: none;
+    transition: all var(--transition);
+    text-decoration: none;
+}
+.catalog-card__actions .button:hover,
+.catalog-card__actions a.add_to_cart_button:hover { background: #d4400f; }
+
+.catalog-card__btn--plan {
+    padding: 10px 20px;
+    background: var(--color-accent);
+    color: var(--color-white);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--border-radius-btn);
+    border: none;
     transition: all var(--transition);
 }
-.catalog-card__btn--plan:hover { background: var(--color-primary); color: var(--color-white); }
+.catalog-card__btn--plan:hover { background: #d4400f; color: var(--color-white); }
 
 .catalog-card__btn--trial {
     font-size: 13px;
@@ -3135,7 +3157,7 @@ h1 { margin-block: 0; }
 /* Gallery 2x2 */
 .prom-product__gallery { min-width: 0; }
 .prom-product__gallery img { max-width: 100%; height: auto; }
-.prom-gallery-grid__placeholder { display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); border-radius: var(--border-radius); padding: 20px; }
+.prom-gallery-grid__placeholder { display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); border-radius: var(--border-radius); padding: 40px; max-width: 300px; max-height: 300px; aspect-ratio: 1; }
 .prom-gallery-grid__placeholder img,
 .prom-product__gallery img.wp-post-image { max-width: 300px !important; max-height: 300px !important; width: auto !important; height: auto !important; object-fit: contain; }
 .prom-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -3184,7 +3206,7 @@ h1 { margin-block: 0; }
     background: var(--color-accent);
     color: var(--color-white);
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-btn);
     font-size: 16px;
     font-weight: 700;
     text-transform: uppercase;
@@ -3242,7 +3264,7 @@ h1 { margin-block: 0; }
 /* ============================================
    ACCOUNT PAGE
    ============================================ */
-.account-page { padding: 40px 0; }
+.account-page { padding: 40px 0; background-color: #F5F5F5; }
 .account-container { display: grid; grid-template-columns: 260px 1fr; gap: 40px; max-width: 1440px; margin: 0 auto; padding: 0 120px; }
 
 .prom-account-nav {
@@ -3408,7 +3430,7 @@ body.lightbox-open { overflow: hidden; }
 #place_order:hover { background: #d4400f; }
 
 /* Woocommerce wrapper */
-.woocommerce-page { padding: 40px 0; }
+.woocommerce-page { padding: 40px 0; background-color: #F5F5F5; }
 .woocommerce-container { max-width: 1440px; margin: 0 auto; padding: 0 120px; }
 
 /* ============================================

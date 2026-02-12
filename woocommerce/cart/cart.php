@@ -140,9 +140,12 @@ do_action( 'woocommerce_before_cart' ); ?>
                             <div class="catalog-card__description">
                                 <?php echo wpautop( $product->get_short_description() ); ?>
                             </div>
+                            <div class="catalog-card__price">
+                                <?php echo $product->get_price_html(); ?>
+                            </div>
                             <div class="catalog-card__actions">
-                                <a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>" class="catalog-card__btn catalog-card__btn--plan">Choose Plan</a>
-                                <a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>" class="catalog-card__btn catalog-card__btn--trial">Free trial</a>
+                                <a href="<?php echo esc_url( $product->add_to_cart_url() ); ?>" class="catalog-card__btn catalog-card__btn--plan"><?php echo esc_html( $product->add_to_cart_text() ); ?></a>
+                                <a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>?free-trial=1" class="catalog-card__btn catalog-card__btn--trial">Free trial</a>
                             </div>
                         </div>
                     </div>
