@@ -58,12 +58,15 @@
               </a>
             </li>
 
-            <li class="main-nav__item main-nav__item--cart">
+            <li class="main-nav__item main-nav__item--cart mini-cart-wrapper">
               <a class="main-nav__item-link main-nav__item-link--cart" href="<?php echo esc_url( wc_get_cart_url() ); ?>"><span>Cart</span><?php if ( function_exists( 'WC' ) && WC()->cart->get_cart_contents_count() > 0 ) : ?><span class="cart-count"><?php echo WC()->cart->get_cart_contents_count(); ?></span><?php endif; ?>
                 <svg class="main-nav__item-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path d="M4 4.5H16M4 4.5L7 12.5H16V4.5M4 4.5L3 0.5H1M16 4.5V2.5M9 15.5C9 16.1627 8.66274 16.5 8 16.5C7.33726 16.5 7 16.1627 7 15.5C7 14.8373 7.33726 14.5 8 14.5C8.66274 14.5 9 14.8373 9 15.5ZM17 15.5C17 16.1627 16.6627 16.5 16 16.5C15.3373 16.5 15 16.1627 15 15.5C15 14.8373 15.3373 14.5 16 14.5C16.6627 14.5 17 14.8373 17 15.5Z" stroke="#563075" stroke-linecap="round"/>
                 </svg>
               </a>
+              <div class="mini-cart-dropdown">
+                <?php if ( function_exists( 'WC' ) ) { woocommerce_mini_cart(); } ?>
+              </div>
             </li>
           </ul>
 

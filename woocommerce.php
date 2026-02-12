@@ -1,7 +1,15 @@
-<?php get_header(); ?>
+<?php
+/**
+ * WooCommerce wrapper template
+ * Used as fallback for WooCommerce pages without specific templates
+ */
 
-<main class="wrap">
-  <?php woocommerce_content(); ?>
+get_header(); ?>
+
+<main class="woocommerce-page">
+    <div class="woocommerce-container container">
+        <?php woocommerce_content(); ?>
+    </div>
 </main>
 
 <?php get_footer(); ?>
