@@ -1783,8 +1783,9 @@ h1 { margin-block: 0; }
 	background-color: #EB491D;
 	color: white;
 	width: 100%;
-	height: 40px;
-	padding: 13px 68px;
+	max-width: 320px;
+	height: auto;
+	padding: 13px 24px;
 	border-color: white;
 	border-width: 1px;
 	border-radius: 20px;
@@ -1794,13 +1795,36 @@ h1 { margin-block: 0; }
 	font-weight: 500;
 	font-size: 12px;
 	line-height: 14px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+.prom_single_add_to_cart_button:hover {
+	background-color: #d43e14;
+}
+.prom_single_add_to_cart_button .prom-btn-price {
+	font-size: 11px;
+	opacity: 0.9;
+}
+.prom_single_add_to_cart_button .prom-btn-price del {
+	opacity: 0.7;
+}
+.prom_single_add_to_cart_button .prom-btn-price ins {
+	text-decoration: none;
+	font-weight: 700;
+}
+.prom_single_add_to_cart_button .prom-btn-price .woocommerce-Price-amount {
+	color: white;
 }
 
-.woocommerce div.product {
+.woocommerce div.product,
+.prom-product {
 	padding: 60px 120px;
 	background-color: #f5F5F5;
-	display: grid;
-	grid-template-columns: 2fr 1fr;
+	display: block !important;
 }
 
 .woocommerce div.product-tile-grid {
@@ -3108,9 +3132,16 @@ h1 { margin-block: 0; }
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     margin-bottom: 60px;
+    overflow: hidden;
 }
+.prom-product__info { max-width: 100%; overflow: hidden; }
 
 /* Gallery 2x2 */
+.prom-product__gallery { min-width: 0; }
+.prom-product__gallery img { max-width: 100%; height: auto; }
+.prom-gallery-grid__placeholder { display: flex; align-items: center; justify-content: center; background: var(--color-bg-light); border-radius: var(--border-radius); padding: 20px; }
+.prom-gallery-grid__placeholder img,
+.prom-product__gallery img.wp-post-image { max-width: 300px !important; max-height: 300px !important; width: auto !important; height: auto !important; object-fit: contain; }
 .prom-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .prom-gallery-grid__item { aspect-ratio: 1; border-radius: var(--border-radius); overflow: hidden; background: var(--color-bg-light); }
 .prom-gallery-grid__item img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform var(--transition); }

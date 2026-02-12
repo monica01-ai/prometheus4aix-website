@@ -41,7 +41,11 @@ if ( post_password_required() ) {
                 </div>
             <?php else : ?>
                 <div class="prom-gallery-grid__placeholder">
-                    <?php echo wc_placeholder_img( 'large' ); ?>
+                    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="200" height="200" rx="8" fill="#E8E8E8"/>
+                        <path d="M60 140L90 100L110 125L130 95L150 140H60Z" fill="#C4C4C4"/>
+                        <circle cx="80" cy="75" r="15" fill="#C4C4C4"/>
+                    </svg>
                 </div>
             <?php endif; ?>
         </div>

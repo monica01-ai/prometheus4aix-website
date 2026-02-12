@@ -11,6 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
+// Disable WooCommerce default styles (theme provides all CSS)
+add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+
 /**
  * Theme Setup
  */
@@ -91,6 +94,10 @@ add_action( 'wp_enqueue_scripts', 'prometheus_enqueue_scripts' );
  */
 remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
 remove_action( 'woocommerce_product_thumbnails', 'woocommerce_show_product_thumbnails', 20 );
+
+// Remove default tabs and related products from hooks (we place them manually in template)
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
+remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 
 /**
  * WooCommerce - Custom product image gallery
@@ -280,10 +287,6 @@ add_filter( 'woocommerce_account_menu_items', 'prometheus_account_menu_items' );
  * WooCommerce - Custom add to cart button with price
  */
 function prometheus_single_add_to_cart_text( $text, $product ) {
-    $price = $product->get_price();
-    if ( $price ) {
-        return sprintf( __( 'ADD TO CART %s', 'prometheus4aix' ), wc_price( $price ) );
-    }
-    return __( 'ADD TO CART', 'prometheus4aix' );
+    return 'ADD TO CART';
 }
 add_filter( 'woocommerce_product_single_add_to_cart_text', 'prometheus_single_add_to_cart_text', 10, 2 );
