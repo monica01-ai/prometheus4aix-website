@@ -28,9 +28,12 @@ get_header(); ?>
                             <div class="catalog-card__description">
                                 <?php echo wpautop( $product->get_short_description() ); ?>
                             </div>
+                            <div class="catalog-card__price">
+                                <?php echo $product->get_price_html(); ?>
+                            </div>
                             <div class="catalog-card__actions">
-                                <a href="<?php the_permalink(); ?>" class="catalog-card__btn catalog-card__btn--plan">Choose Plan</a>
-                                <a href="<?php the_permalink(); ?>" class="catalog-card__btn catalog-card__btn--trial">Free trial</a>
+                                <?php woocommerce_template_loop_add_to_cart(); ?>
+                                <a href="<?php the_permalink(); ?>?free-trial=1" class="catalog-card__btn catalog-card__btn--trial">Free trial</a>
                             </div>
                         </div>
                     </div>

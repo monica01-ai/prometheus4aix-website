@@ -290,3 +290,58 @@ function prometheus_single_add_to_cart_text( $text, $product ) {
     return 'ADD TO CART';
 }
 add_filter( 'woocommerce_product_single_add_to_cart_text', 'prometheus_single_add_to_cart_text', 10, 2 );
+
+/**
+ * Force classic Cart & Checkout (disable WooCommerce Blocks)
+ * This ensures our custom cart.php template is used instead of the Block Cart.
+ */
+function prometheus_force_classic_cart_checkout( $use_block, $feature ) {
+    if ( in_array( $feature, array( 'cart', 'checkout' ), true ) ) {
+        return false;
+    }
+    return $use_block;
+}
+add_filter( 'woocommerce_should_load_cart_block', '__return_false' );
+add_filter( 'woocommerce_should_load_mini_cart_block', '__return_false' );
+
+// Disable Cart & Checkout blocks via BlockTypes registry
+function prometheus_disable_wc_blocks() {
+    // Replace block cart/checkout pages with shortcode versions if needed
+    if ( class_exists( '\Automattic\WooCommerce\Blocks\BlockTypes\Cart' ) ) {
+        // Force WooCommerce to use classic shortcode templates
+        add_filter( 'woocommerce_cart_shortcode_tag', function() { return 'woocommerce_cart'; } );
+    }
+}
+add_action( 'init', 'prometheus_disable_wc_blocks' );
+
+/**
+ * Disable WooCommerce block-based templates
+ */
+function prometheus_disable_wc_block_templates( $value, $option ) {
+    if ( $option === 'woocommerce_cart_page_id' || $option === 'woocommerce_checkout_page_id' ) {
+        return $value;
+    }
+    return $value;
+}
+
+/**
+ * Remove WooCommerce Block styles that conflict with our theme
+ */
+function prometheus_dequeue_wc_block_styles() {
+    wp_dequeue_style( 'wc-blocks-style' );
+    wp_dequeue_style( 'wc-blocks-vendors-style' );
+    wp_dequeue_style( 'wc-all-blocks-style' );
+}
+add_action( 'wp_enqueue_scripts', 'prometheus_dequeue_wc_block_styles', 100 );
+
+/**
+ * Remove default WooCommerce shop page title and result count
+ */
+add_filter( 'woocommerce_show_page_title', '__return_false' );
+remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
+remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
+
+/**
+ * Remove breadcrumbs on WooCommerce pages (Figma has none)
+ */
+remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
