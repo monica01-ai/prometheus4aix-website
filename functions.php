@@ -1,0 +1,263 @@
+<?php
+/**
+ * Prometheus4AIX Theme Functions
+ * 
+ * @package Prometheus4AIX
+ * @version 2.0.0
+ */
+
+// Prevent direct access
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+/**
+ * Theme Setup
+ */
+function prometheus_theme_setup() {
+    // Add WooCommerce support
+    add_theme_support( 'woocommerce' );
+    add_theme_support( 'wc-product-gallery-zoom' );
+    add_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
+    
+    // Add title tag support
+    add_theme_support( 'title-tag' );
+    
+    // Add post thumbnails support
+    add_theme_support( 'post-thumbnails' );
+    
+    // Add custom logo support
+    add_theme_support( 'custom-logo', array(
+        'height'      => 100,
+        'width'       => 400,
+        'flex-height' => true,
+        'flex-width'  => true,
+    ) );
+    
+    // Register navigation menus
+    register_nav_menus( array(
+        'header-menu' => __( 'Header Menu', 'prometheus4aix' ),
+        'footer-menu' => __( 'Footer Menu', 'prometheus4aix' ),
+    ) );
+    
+    // Add HTML5 support
+    add_theme_support( 'html5', array(
+        'search-form',
+        'comment-form',
+        'comment-list',
+        'gallery',
+        'caption',
+    ) );
+}
+add_action( 'after_setup_theme', 'prometheus_theme_setup' );
+
+/**
+ * Enqueue scripts and styles
+ */
+function prometheus_enqueue_scripts() {
+    // Main stylesheet
+    wp_enqueue_style( 
+        'prometheus-style', 
+        get_stylesheet_uri(), 
+        array(), 
+        '2.0.0' 
+    );
+    
+    // Menu script
+    wp_enqueue_script( 
+        'prometheus-menu', 
+        get_template_directory_uri() . '/js/menu.js', 
+        array( 'jquery' ), 
+        '2.0.0', 
+        true 
+    );
+    
+    // Product gallery script
+    if ( is_product() ) {
+        wp_enqueue_script( 
+            'prometheus-gallery', 
+            get_template_directory_uri() . '/js/gallery.js', 
+            array( 'jquery' ), 
+            '2.0.0', 
+            true 
+        );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'prometheus_enqueue_scripts' );
+
+/**
+ * WooCommerce - Remove default product images and add custom gallery
+ */
+remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
+remove_action( 'woocommerce_product_thumbnails', 'woocommerce_show_product_thumbnails', 20 );
+
+/**
+ * WooCommerce - Custom product image gallery
+ */
+function prometheus_product_gallery() {
+    global $product;
+    
+    $image_ids = $product->get_gallery_image_ids();
+    $main_image = $product->get_image_id();
+    
+    if ( $main_image ) {
+        array_unshift( $image_ids, $main_image );
+    }
+    
+    if ( empty( $image_ids ) ) {
+        echo '<div class="product-gallery__placeholder">';
+        echo wc_placeholder_img( 'large' );
+        echo '</div>';
+        return;
+    }
+    
+    echo '<div class="product-gallery">';
+    echo '<div class="product-gallery__grid">';
+    
+    foreach ( $image_ids as $index => $image_id ) {
+        $image_url = wp_get_attachment_image_url( $image_id, 'large' );
+        $image_full = wp_get_attachment_image_url( $image_id, 'full' );
+        $image_alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+        
+        $main_class = $index === 0 ? 'product-gallery__item--main' : '';
+        
+        echo '<div class="product-gallery__item ' . esc_attr( $main_class ) . '">';
+        echo '<a href="' . esc_url( $image_full ) . '" class="product-gallery__link" data-lightbox="product-gallery">';
+        echo '<img src="' . esc_url( $image_url ) . '" alt="' . esc_attr( $image_alt ) . '" class="product-gallery__image" />';
+        echo '</a>';
+        echo '</div>';
+    }
+    
+    echo '</div>';
+    echo '</div>';
+}
+add_action( 'woocommerce_before_single_product_summary', 'prometheus_product_gallery', 20 );
+
+/**
+ * WooCommerce - Modify product tabs
+ */
+function prometheus_product_tabs( $tabs ) {
+    // Rename tabs
+    if ( isset( $tabs['description'] ) ) {
+        $tabs['description']['title'] = __( 'Description', 'prometheus4aix' );
+        $tabs['description']['priority'] = 10;
+    }
+    
+    if ( isset( $tabs['additional_information'] ) ) {
+        $tabs['additional_information']['title'] = __( 'Specifications', 'prometheus4aix' );
+        $tabs['additional_information']['priority'] = 20;
+    }
+    
+    if ( isset( $tabs['reviews'] ) ) {
+        $tabs['reviews']['title'] = __( 'Reviews', 'prometheus4aix' );
+        $tabs['reviews']['priority'] = 30;
+    }
+    
+    return $tabs;
+}
+add_filter( 'woocommerce_product_tabs', 'prometheus_product_tabs' );
+
+/**
+ * WooCommerce - Products per page
+ */
+function prometheus_products_per_page( $cols ) {
+    return 12;
+}
+add_filter( 'loop_shop_per_page', 'prometheus_products_per_page' );
+
+/**
+ * WooCommerce - Products per row
+ */
+function prometheus_loop_columns() {
+    return 3;
+}
+add_filter( 'loop_shop_columns', 'prometheus_loop_columns' );
+
+/**
+ * WooCommerce - Related products count
+ */
+function prometheus_related_products_args( $args ) {
+    $args['posts_per_page'] = 4;
+    $args['columns'] = 4;
+    return $args;
+}
+add_filter( 'woocommerce_output_related_products_args', 'prometheus_related_products_args' );
+
+/**
+ * WooCommerce - Add custom body classes
+ */
+function prometheus_body_classes( $classes ) {
+    if ( is_shop() || is_product_category() || is_product_tag() ) {
+        $classes[] = 'prometheus-shop';
+    }
+    
+    if ( is_product() ) {
+        $classes[] = 'prometheus-product';
+    }
+    
+    if ( is_cart() ) {
+        $classes[] = 'prometheus-cart';
+    }
+    
+    if ( is_checkout() ) {
+        $classes[] = 'prometheus-checkout';
+    }
+    
+    if ( is_account_page() ) {
+        $classes[] = 'prometheus-account';
+    }
+    
+    return $classes;
+}
+add_filter( 'body_class', 'prometheus_body_classes' );
+
+/**
+ * WooCommerce - Remove sidebar on product pages
+ */
+function prometheus_remove_sidebar() {
+    if ( is_product() ) {
+        remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar', 10 );
+    }
+}
+add_action( 'wp', 'prometheus_remove_sidebar' );
+
+/**
+ * WooCommerce - Custom add to cart button text
+ */
+function prometheus_add_to_cart_text( $text, $product ) {
+    if ( $product->is_type( 'simple' ) ) {
+        return __( 'Add to Cart', 'prometheus4aix' );
+    }
+    return $text;
+}
+add_filter( 'woocommerce_product_add_to_cart_text', 'prometheus_add_to_cart_text', 10, 2 );
+
+/**
+ * Register widget areas
+ */
+function prometheus_widgets_init() {
+    register_sidebar( array(
+        'name'          => __( 'Shop Sidebar', 'prometheus4aix' ),
+        'id'            => 'shop-sidebar',
+        'description'   => __( 'Widgets for shop pages', 'prometheus4aix' ),
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h3 class="widget-title">',
+        'after_title'   => '</h3>',
+    ) );
+}
+add_action( 'widgets_init', 'prometheus_widgets_init' );
+
+/**
+ * AJAX add to cart for shop page
+ */
+function prometheus_ajax_add_to_cart() {
+    add_filter( 'woocommerce_add_to_cart_fragments', 'prometheus_cart_count_fragments', 10, 1 );
+}
+add_action( 'init', 'prometheus_ajax_add_to_cart' );
+
+function prometheus_cart_count_fragments( $fragments ) {
+    $fragments['span.cart-count'] = '<span class="cart-count">' . WC()->cart->get_cart_contents_count() . '</span>';
+    return $fragments;
+}
